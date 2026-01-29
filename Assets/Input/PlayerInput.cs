@@ -145,6 +145,24 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PickUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""da2643a6-eeb8-4b06-af2a-cd873c25adeb"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Drop"",
+                    ""type"": ""Button"",
+                    ""id"": ""dc607b3b-2ca1-4f6d-968b-99e91460a05d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -312,6 +330,28 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""Reload"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""387ff97e-3004-43a4-b5aa-f3de3092ce73"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PickUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6c01ce2d-2698-415a-aea6-3cefbed0e8db"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -326,6 +366,8 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_OnFoot_Shoot = m_OnFoot.FindAction("Shoot", throwIfNotFound: true);
         m_OnFoot_ShootRelease = m_OnFoot.FindAction("ShootRelease", throwIfNotFound: true);
         m_OnFoot_Reload = m_OnFoot.FindAction("Reload", throwIfNotFound: true);
+        m_OnFoot_PickUp = m_OnFoot.FindAction("PickUp", throwIfNotFound: true);
+        m_OnFoot_Drop = m_OnFoot.FindAction("Drop", throwIfNotFound: true);
     }
 
     ~@PlayerInput()
@@ -412,6 +454,8 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_OnFoot_Shoot;
     private readonly InputAction m_OnFoot_ShootRelease;
     private readonly InputAction m_OnFoot_Reload;
+    private readonly InputAction m_OnFoot_PickUp;
+    private readonly InputAction m_OnFoot_Drop;
     /// <summary>
     /// Provides access to input actions defined in input action map "OnFoot".
     /// </summary>
@@ -447,6 +491,14 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "OnFoot/Reload".
         /// </summary>
         public InputAction @Reload => m_Wrapper.m_OnFoot_Reload;
+        /// <summary>
+        /// Provides access to the underlying input action "OnFoot/PickUp".
+        /// </summary>
+        public InputAction @PickUp => m_Wrapper.m_OnFoot_PickUp;
+        /// <summary>
+        /// Provides access to the underlying input action "OnFoot/Drop".
+        /// </summary>
+        public InputAction @Drop => m_Wrapper.m_OnFoot_Drop;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -491,6 +543,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Reload.started += instance.OnReload;
             @Reload.performed += instance.OnReload;
             @Reload.canceled += instance.OnReload;
+            @PickUp.started += instance.OnPickUp;
+            @PickUp.performed += instance.OnPickUp;
+            @PickUp.canceled += instance.OnPickUp;
+            @Drop.started += instance.OnDrop;
+            @Drop.performed += instance.OnDrop;
+            @Drop.canceled += instance.OnDrop;
         }
 
         /// <summary>
@@ -520,6 +578,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Reload.started -= instance.OnReload;
             @Reload.performed -= instance.OnReload;
             @Reload.canceled -= instance.OnReload;
+            @PickUp.started -= instance.OnPickUp;
+            @PickUp.performed -= instance.OnPickUp;
+            @PickUp.canceled -= instance.OnPickUp;
+            @Drop.started -= instance.OnDrop;
+            @Drop.performed -= instance.OnDrop;
+            @Drop.canceled -= instance.OnDrop;
         }
 
         /// <summary>
@@ -602,5 +666,19 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnReload(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PickUp" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPickUp(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Drop" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDrop(InputAction.CallbackContext context);
     }
 }

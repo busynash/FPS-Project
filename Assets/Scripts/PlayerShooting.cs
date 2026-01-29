@@ -5,6 +5,7 @@ public class PlayerShooting : MonoBehaviour
 {
     public Gun gun;
     public bool isholdinShoot = false;
+    public Transform gunHolder;
 
     void OnShoot()
     {
@@ -28,6 +29,14 @@ public class PlayerShooting : MonoBehaviour
         if (isholdinShoot && gun != null)
         {
             gun.Shoot();
+        }
+    }
+    public void OnDrop()
+    {
+        if(gun!= null)
+        {
+            gun.Drop();
+            gun = null;
         }
     }
 }

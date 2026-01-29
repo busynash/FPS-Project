@@ -14,6 +14,7 @@ public class Gun : MonoBehaviour
     public float recoilSpeed = 15f;
 
     public GameObject weaponFlash;
+    public GameObject droppedWeapon;
 
     private int currnetAmmo;
     private bool isReloading = false;
@@ -90,7 +91,7 @@ public class Gun : MonoBehaviour
 
    private IEnumerator Recoil()
    {
-       Vector3 recoilTarget = initialPosition + new Vector3(0, 0, -recoilDistance);
+       Vector3 recoilTarget = initialPosition + new Vector3(recoilDistance,0, 0);
        float t = 0f;
        while (t < 1f)
        {
@@ -109,4 +110,10 @@ public class Gun : MonoBehaviour
        }
        transform.localPosition = initialPosition;
    }
+
+    public void Drop()
+    {
+        Instantiate(droppedWeapon, transform.position , transform.rotation);
+        Destroy(gameObject);
+    }
 }

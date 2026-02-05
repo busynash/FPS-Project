@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 90899651}
   - component: {fileID: 90899653}
   - component: {fileID: 90899654}
+  - component: {fileID: 90899655}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -258,7 +259,7 @@ Transform:
   m_GameObject: {fileID: 90899644}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 42.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -278,7 +279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9d04ecb9c7199a46a878bd60409a593, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  moveSpeed: 5
+  moveSpeed: 6
   jumpForce: 5
   groundCheck: {fileID: 640614103}
   groundDistance: 0.4
@@ -344,6 +345,19 @@ MonoBehaviour:
   gun: {fileID: 0}
   isholdinShoot: 0
   gunHolder: {fileID: 408013365}
+--- !u!114 &90899655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90899644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b37549b6014f7c14fa94dba96f837bbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  health: 100
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -1375,12 +1389,17 @@ MonoBehaviour:
   currentPointIndex: 0
   currentTarget: {x: 0, y: 0, z: 0}
   positionThreshold: 2
-  idelTime: 5
+  idleTime: 5
   attackDistance: 5
   maxVisionDistance: 20
-  minChasingHealth: 30
-  patrolpoints: []
+  minimumChasingHealth: 30
+  patrolPoints: []
   state: 0
+  bulletPrefab: {fileID: 5341742223406746680, guid: 9c3cddd6060b7cc4eadfb9cefcf6e7db, type: 3}
+  bulletSpawnPoint: {fileID: 701306048312176549}
+  bloom: 0.75
+  fireRate: 0.3
+  weaponFlash: {fileID: 7248954206340311930, guid: cce34e560c4f3cb47931a81fc9c049b1, type: 3}
 --- !u!54 &1927177147
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1514,7 +1533,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 2.5
+  m_Speed: 4
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120

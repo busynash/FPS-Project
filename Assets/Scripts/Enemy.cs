@@ -96,7 +96,7 @@ public class Enemy : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (!this.enabled) return; // If enemy is dead, do nothing
-        if (collision.gameObject.CompareTag("damage"))
+        if (collision.gameObject.tag == "Damage")
         {
             health -= 10;           // Lose 10 health per hit
             if (health <= 0)

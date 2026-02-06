@@ -6,7 +6,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("damage"))
+        if (collision.gameObject.CompareTag("Damage"))
         {
             DecreaseHealth(10); // Lose 10 health per hit
         }
@@ -16,6 +16,8 @@ public class PlayerHealth : MonoBehaviour
     {
         health -= amount;     // Reduce health
         CheckDeath();         // Check if player is dead
+        PlayerLook.instance.AddShake(0.1f, 0.25f);
+        UIManager.Instance.InstantiateHitUI();
     }
 
     private void CheckDeath()

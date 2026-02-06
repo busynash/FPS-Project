@@ -1,40 +1,91 @@
 ﻿using UnityEngine;
-using UnityEngine.InputSystem; // Input System
+using UnityEngine.InputSystem; // New Input System
 
 public class PlayerLook : MonoBehaviour
 {
-    public float mouseSensitivity = 50f; // final sensitivity used
-    public Transform cam;                // camera transform (child of Player)
+    public static PlayerLook instance;          // Singleton reference for access from other scripts
 
-    private float xRotation = 0f;        // vertical rotation accumulator
-    private Vector2 lookInput;           // from Input System (mouse delta)
+    private float shakeDuration = 0f;           // Remaining time for screen shake
+    private float shakeMagnitude = 0.1f;        // Strength of camera shake
+    private float shakeFadeSpeed = 1.5f;        // Speed shake fades out
+    private Vector3 initialCamPos;              // Original camera local position
+
+
+    public float mouseSensitivity = 50f;        // final value used at the end of the episode  
+    public Transform cam;
+
+    private float xRotation = 0f;
+    private Vector2 lookInput;
+
+    // Initialize singleton instance
+    private void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked; // lock cursor to center
-        Cursor.visible = false;                   // hide cursor
-    }
+        // Lock and hide the cursor
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
-    void OnLook(InputValue value) // "Look" → OnLook
-    {
-        lookInput = value.Get<Vector2>(); // read mouse delta (x,y)
+        initialCamPos = cam.localPosition;      // Store starting camera position
     }
 
     void Update()
     {
-        HandleMouseLook(); // apply look every frame
+        HandleMouseLook();
+        HandleShake();          // Apply camera shake if active
     }
 
-    private void HandleMouseLook()
+    // Trigger screen shake with duration and strength
+    public void AddShake(float duration, float magnitude)
     {
-        float mouseX = lookInput.x * mouseSensitivity * Time.deltaTime; // yaw
-        float mouseY = lookInput.y * mouseSensitivity * Time.deltaTime; // pitch
+        shakeDuration = duration;
+        shakeMagnitude = magnitude;
+    }
 
-        xRotation -= mouseY;                     // invert for natural pitch
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f); // limit vertical pitch look
+    // Apply shake effect each frame
+    private void HandleShake()
+    {
+        if(Time.timeScale == 0f)
+        {
+            cam.localPosition = initialCamPos;
+            return;
+        }
 
-        cam.localRotation = Quaternion.Euler(xRotation, 0f, 0f); // pitch on cam
+        if (shakeDuration > 0)
+        {
+            // Offset camera randomly within sphere
+            cam.localPosition = initialCamPos + Random.insideUnitSphere * shakeMagnitude;
+            // Reduce remaining shake time
+            shakeDuration -= Time.deltaTime * shakeFadeSpeed;
+        }
+        else
+        {
+            // Reset camera to original position
+            cam.localPosition = initialCamPos;
+        }
+    }
 
-        transform.Rotate(Vector3.up * mouseX);   // yaw on player body (Y axis)
+    // Called by Player Input (Send Messages) when Look value changes
+    void OnLook(InputValue value)
+    {
+        lookInput = value.Get<Vector2>();
+    }
+
+    void HandleMouseLook()
+    {
+        // Convert input to per-second rotation using sensitivity and deltaTime
+        float mouseX = lookInput.x * mouseSensitivity * Time.deltaTime;
+        float mouseY = lookInput.y * mouseSensitivity * Time.deltaTime;
+
+        // Vertical look (camera)   clamp to prevent over-rotation
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+        cam.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+
+        // Horizontal look (player body)
+        transform.Rotate(Vector3.up * mouseX);
     }
 }

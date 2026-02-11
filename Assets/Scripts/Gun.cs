@@ -8,6 +8,7 @@ public class Gun : MonoBehaviour
     public float fireRate = 0.15f;
     public int magSize = 20;
 
+    public AudioClip shootingSFX;
     public GameObject bullet;
     public Transform bulletSpawnPoint;
     public float recoilDistance = 0.1f;
@@ -46,6 +47,8 @@ public class Gun : MonoBehaviour
 
         nextTimeToFire = Time.time + fireRate;
         currnetAmmo--;
+
+        AudioManager.instance.PlaySFX(shootingSFX, 0.25f);
 
         Instantiate(bullet, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
         Instantiate(weaponFlash, bulletSpawnPoint.position, bulletSpawnPoint.rotation);

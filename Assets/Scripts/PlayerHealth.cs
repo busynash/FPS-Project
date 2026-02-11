@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
+
+    public AudioClip hitSFX;
     public int health = 100; // Player starting health
 
     private void OnCollisionEnter(Collision collision)
@@ -18,6 +20,8 @@ public class PlayerHealth : MonoBehaviour
         CheckDeath();         // Check if player is dead
         PlayerLook.instance.AddShake(0.1f, 0.25f);
         UIManager.Instance.InstantiateHitUI();
+
+        AudioManager.instance.PlaySFX(hitSFX);
     }
 
     private void CheckDeath()

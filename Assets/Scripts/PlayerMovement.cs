@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.InputSystem; // Input System (Send Messages)
 
 public class PlayerMovement : MonoBehaviour
@@ -11,13 +12,16 @@ public class PlayerMovement : MonoBehaviour
     public float groundDistance = 0.4f;
     public LayerMask groundMask;        // set to "Ground" layer for ground test in Inspector
 
+    public AudioClip footStepSfx;
+
     private Rigidbody rb;               // player rigidbody
     private Vector2 moveInput;          // WASD/Arrows as (x,y)
     private bool isGrounded;
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>(); // cache Rigidbody
+        rb = GetComponent<Rigidbody>(); // cache Rigidbod
+        StartCoroutine(PlayFootStep());
     }
 
     void Update()
@@ -64,5 +68,19 @@ public class PlayerMovement : MonoBehaviour
 
         // true if sphere overlaps any collider on groundMask within groundDistance
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+    }
+
+    IEnumerator PlayFootStep()
+    {
+        while (true)
+        {
+            if (rb.linearVelocity.magnitude > 0.1f && isGrounded)
+            {
+                AudioManager.instance.PlaySFX(footStepSfx);
+            }
+            yield return new WaitForSeconds(0.5f);
+        }
+
+
     }
 }
